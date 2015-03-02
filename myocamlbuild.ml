@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 4f1e3ad4da38e4f530c6821d453183a7) *)
+(* DO NOT EDIT (digest: 82ff80706df68b027e4013ffd63679bb) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -623,18 +623,31 @@ let package_default =
                       A "c++";
                       A "-ccopt";
                       A "-DMACOSX"
+                   ]);
+               (OASISExpr.ETest ("system", "linux"),
+                 S
+                   [
+                      A "-ccopt";
+                      A "-x";
+                      A "-ccopt";
+                      A "c++";
+                      A "-ccopt";
+                      A "-DLINUX"
                    ])
             ]);
           (["oasis_library_firmata_cclib"; "link"],
             [
                (OASISExpr.EBool true, S []);
                (OASISExpr.ETest ("system", "macosx"),
+                 S [A "-cclib"; A "-lstdc++"]);
+               (OASISExpr.ETest ("system", "linux"),
                  S [A "-cclib"; A "-lstdc++"])
             ]);
           (["oasis_library_firmata_cclib"; "ocamlmklib"; "c"],
             [
                (OASISExpr.EBool true, S []);
-               (OASISExpr.ETest ("system", "macosx"), S [A "-lstdc++"])
+               (OASISExpr.ETest ("system", "macosx"), S [A "-lstdc++"]);
+               (OASISExpr.ETest ("system", "linux"), S [A "-lstdc++"])
             ]);
           (["oasis_executable_test_cclib"; "link"],
             [
@@ -652,7 +665,9 @@ let package_default =
                       A "-framework";
                       A "-cclib";
                       A "IOKit"
-                   ])
+                   ]);
+               (OASISExpr.ETest ("system", "linux"),
+                 S [A "-cclib"; A "-lstdc++"])
             ]);
           (["oasis_executable_test_cclib"; "ocamlmklib"; "c"],
             [
@@ -665,7 +680,8 @@ let package_default =
                       A "CoreFoundation";
                       A "-framework";
                       A "IOKit"
-                   ])
+                   ]);
+               (OASISExpr.ETest ("system", "linux"), S [A "-lstdc++"])
             ])
        ];
      includes = []
@@ -676,6 +692,6 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 680 "myocamlbuild.ml"
+# 696 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
