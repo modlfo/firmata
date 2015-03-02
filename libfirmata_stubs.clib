@@ -1,0 +1,5 @@
+# OASIS_START
+# DO NOT EDIT (digest: c9277ddea75e9079070c69200575d4cc)
+firmata_stubs.o
+serial.o
+# OASIS_STOP

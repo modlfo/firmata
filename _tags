@@ -1,0 +1,32 @@
+# OASIS_START
+# DO NOT EDIT (digest: ce5780c36bc73da281b77b48296e113c)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+true: annot, bin_annot
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library firmata
+"firmata.cmxs": use_firmata
+<*.ml{,i,y}>: oasis_library_firmata_ccopt
+"firmata_stubs.c": oasis_library_firmata_ccopt
+"serial.c": oasis_library_firmata_ccopt
+<firmata.{cma,cmxa}>: oasis_library_firmata_cclib
+"libfirmata_stubs.lib": oasis_library_firmata_cclib
+"dllfirmata_stubs.dll": oasis_library_firmata_cclib
+"libfirmata_stubs.a": oasis_library_firmata_cclib
+"dllfirmata_stubs.so": oasis_library_firmata_cclib
+<firmata.{cma,cmxa}>: use_libfirmata_stubs
+# Executable test
+<test.{native,byte}>: oasis_executable_test_cclib
+<test.{native,byte}>: use_firmata
+<*.ml{,i,y}>: use_firmata
+# OASIS_STOP

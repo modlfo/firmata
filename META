@@ -1,0 +1,11 @@
+# OASIS_START
+# DO NOT EDIT (digest: d36148981145d2f49f9f881f47634970)
+version = "0.1"
+description = "Library to control Firmata boards like Arduino."
+archive(byte) = "firmata.cma"
+archive(byte, plugin) = "firmata.cma"
+archive(native) = "firmata.cmxa"
+archive(native, plugin) = "firmata.cmxs"
+exists_if = "firmata.cma"
+# OASIS_STOP
+

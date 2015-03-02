@@ -1,0 +1,40 @@
+Name: Firmata
+Version: 0.1
+Synopsis: Library to control Firmata boards like Arduino.
+Authors: Leonardo Laguna Ruiz <modlfo@gmail.com>
+License: GPL-3
+
+Description: Allows to control boards supporting the Firmata protocol (firmata.org) like Arduino boards.
+Homepage: http://firmata.org
+
+OASISFormat: 0.4
+BuildTools: ocamlbuild
+Plugins: META (0.4), DevFiles (0.4)
+
+Library "firmata"
+  Path: .
+  Modules: Firmata
+  CSources: firmata_stubs.c,serial.c,serial.h
+  if system(macosx)
+    CCOpt: -x c++ -DMACOSX
+    CCLib:-lstdc++
+
+Executable "test"
+  Path: .
+  MainIs: test.ml
+  CompiledObject: best
+  BuildDepends:
+    firmata
+  if system(macosx)
+    CCLib:-lstdc++ -framework CoreFoundation -framework IOKit
+
+AlphaFeatures: ocamlbuild_more_args
+Document "firmata_api"
+  Type: ocamlbuild (0.4)
+  BuildTools: ocamldoc
+
+  Title: API reference for firmata
+  XOCamlbuildPath: .
+  XOCamlbuildExtraArgs:
+    "-docflags '-colorize-code -charset utf-8'"
+  XOCamlbuildLibraries: firmata
