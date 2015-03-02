@@ -21,6 +21,8 @@ Library "firmata"
   if system(linux)
     CCOpt: -x c++ -DLINUX
     CCLib:-lstdc++
+  if os_type(Win32)
+    CCOpt:/TP /DWINDOWS
 
 Executable "test"
   Path: .
