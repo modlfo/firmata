@@ -308,31 +308,21 @@ let printPinMode mode =
 
 (** Prints all the information of a pin *)
 let printPinInfo pin_info =
-   Printf.printf "- Pin %i : " pin_info.number;
-   List.iter printPinMode pin_info.supported_modes;
-   print_newline ()
+   if pin_info.number > 0 then
+      begin
+         Printf.printf "- Pin %i : " pin_info.number;
+         List.iter printPinMode pin_info.supported_modes;
+         let _ =
+            match pin_info.analog_channel with
+            | Some(i) -> Printf.printf " - A%i" i
+            | _ -> ()
+         in
+         print_newline ()
+      end
 
-(** Prints the analog channel for a pin *)
-let printMapping i channel =
-   match channel with
-   | None    -> ()
-   | Some(n) -> Printf.printf "- Pin %i = A%i\n" i n
-
-(*let printResonse msg =
-   match msg with
-   (*
-   | AnalogMsg(p,v)        -> Printf.printf "Analog pin %i = %i\n" p v
-   | DigitalMsg(p,v)       -> Printf.printf "Digital port %i = %i\n" p v
-   *)
-   | FirmwareMsg(x,y,name) -> Printf.printf "firmata %s v%i.%i\n" name x y;
-   | CapabilitiesMsg(pin_info) ->
-      List.iter printPinInfo pin_info
-   | MappingMsg(mapping) ->
-      List.iteri printMapping mapping
-   | PinStatusMsg(pin,mode,value) ->
-      Printf.printf "+ Pin %i (%s) = %i\n" pin (pinModeStr mode) value
-   | _ -> ()
-*)
+let printInformation (handler:firmata_type) : unit =
+   Printf.printf "firmata %s v%s\n" handler.name handler.version;
+   Array.iter  printPinInfo handler.pins
 
 (** Splits an 8 bit integer into a list containing the bits *)
 let splitBits value =

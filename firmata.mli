@@ -81,4 +81,6 @@ val queryPinState : firmata_type -> int -> unit
     See [http://arduino.cc/en/Reference/ServoAttach]*)
 val configServo : firmata_type -> int -> int -> int -> unit
 
+(** [printInformation board] prints the name, pin information and mappings of a board. *)
+val printInformation : firmata_type -> unit
 
