@@ -1,4 +1,8 @@
 
+(* - SimpleExample -
+ * This example shows the basic use of the firmata board.
+ *)
+
 open Firmata
 
 let serial_port = "/dev/tty.usbmodem1411" ;;
@@ -22,7 +26,7 @@ let main () =
            update board 1;                    (* updates the board and waits maximum 1 ms *)
            let value = analogRead board 21 in (* gets the value of the analog pin (10 bits) *)
            let angle = value/4 in             (* dives the value by 4 (makes it 8 bits) *)
-           analogWrite board 4 angle;         (*  writes it to the servo as angle *)
+           analogWrite board 4 angle;         (* writes it to the servo as angle *)
            loop ()
         in loop ()
     | OpenError(msg) -> print_endline msg
