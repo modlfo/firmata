@@ -14,13 +14,21 @@ type pin_mode =
 (** Main type that represents a Firmata board *)
 type firmata_type
 
+(** Either return value when opening the port *)
+type open_return =
+   | OpenOk    of firmata_type
+   | OpenError of string
+
 (** [openPort name] : Opens the serial port [name] which should have attached the board. *)
-val openPort : string -> firmata_type option
+val openPort : string -> open_return
 
 (** [update board ms] : Process all received data. This function receives the value [ms] which
     defines how many milliseconds the board should wait for data before returning. This function
     is a blocking function. If you don't want it to block, call it with zero ms [update board 0]. *)
 val update : firmata_type -> int -> unit
+
+(** [isReady board] : Returns true if the board is ready to receive commands *)
+val isReady : firmata_type -> bool
 
 (** [digitalWrite board pin value] : Writes the given value to the pin. *)
 val digitalWrite : firmata_type -> int -> int -> unit

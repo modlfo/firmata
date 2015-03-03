@@ -129,6 +129,11 @@ type firmata_type =
       chan_to_pin : int array;    (** Mapping of analog channels to pin number *)
    }
 
+(** Either return value when opening the port *)
+type open_return =
+   | OpenOk    of firmata_type
+   | OpenError of string
+
 (** Converts an integer to its corresponding pin mode *)
 let intPinMode (i:int) : pin_mode =
    match i with
@@ -446,7 +451,7 @@ let update (handler:firmata_type) (wait_ms:int) : unit =
          List.iter (fun a -> processResponse handler a) consumed
       end
 
-let openPort (port_name:string) : firmata_type option =
+let openPort (port_name:string) : open_return =
    let port = newSerial() in
    match openSerial port port_name with
    | None ->
@@ -469,15 +474,10 @@ let openPort (port_name:string) : firmata_type option =
          }
          in
          queryFirmware handler;
-         Some(handler)
+         OpenOk(handler)
       end
-   | Some(msg) -> print_endline msg; None
+   | Some(msg) -> OpenError(msg)
 
-(** Sets the value of a given pin digital pin
-   @param handler : firmata_type - The board handler
-   @param pin : int - A valid pin number
-   @param value : int - Zero for setting the pin low otherwise high
-*)
 let digitalWrite (handler:firmata_type) (pin:int) (value:int) : unit =
    let current_value = Array.get handler.values pin in
    if current_value <> value then
@@ -490,11 +490,6 @@ let digitalWrite (handler:firmata_type) (pin:int) (value:int) : unit =
          writeSerial handler.port [0x90 lor port; lsb; msb] |> ignore
       end
 
-(** Sets the value of a given pin analog
-   @param handler : firmata_type - The board handler
-   @param pin : int - A valid pin number
-   @param value : int - Value for the analog pin
-*)
 let analogWrite (handler:firmata_type) (pin:int) (value:int) : unit =
    let current_value = Array.get handler.values pin in
    if current_value <> value then
@@ -507,19 +502,12 @@ let analogWrite (handler:firmata_type) (pin:int) (value:int) : unit =
             writeSerial handler.port [0xE0 lor pin;lsb;msb] |> ignore
       end
 
-(** Gets the last buffered value
-   @param handler : firmata_type - The board handler
-   @param pin : int - A valid pin number
-   @param value : int - Value for the analog pin
-*)
 let analogRead (handler:firmata_type) (pin:int) =
    Array.get handler.values pin
 
-(** Gets the last buffered value
-   @param handler : firmata_type - The board handler
-   @param pin : int - A valid pin number
-   @param value : int - Value for the digital pin
-*)
 let digitalRead (handler:firmata_type) (pin:int) =
    Array.get handler.values pin
+
+let isReady (handler:firmata_type) =
+   handler.ready
 
