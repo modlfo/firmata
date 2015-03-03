@@ -39,3 +39,8 @@ $ ocamlbuild -use-ocamlfind -pkg firmata -lflags -cclib,-lstdc++,-cclib,-framewo
 ### Known issues
 
 Due to problems with Ocaml compiling and linking C++ code I can only build native executables.
+
+### Authors
+
+- Leonardo Laguna Ruiz (modlfo@gmail.com) : Ocaml library and bindings
+- Paul Stoffregen (paul@pjrc.com) : Serial port C++ code (code from https://github.com/firmata/firmata_test )
