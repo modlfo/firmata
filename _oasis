@@ -35,6 +35,17 @@ Executable "test"
   if system(linux)
     CCLib:-lstdc++
 
+Executable "SimpleExample"
+  Path: .
+  MainIs: SimpleExample.ml
+  CompiledObject: best
+  BuildDepends:
+    firmata
+  if system(macosx)
+    CCLib:-lstdc++ -framework CoreFoundation -framework IOKit
+  if system(linux)
+    CCLib:-lstdc++
+
 AlphaFeatures: ocamlbuild_more_args
 Document "firmata_api"
   Type: ocamlbuild (0.4)

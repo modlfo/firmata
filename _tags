@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: ce5780c36bc73da281b77b48296e113c)
+# DO NOT EDIT (digest: d57f4c94d675a67aa76d020cf06a9ed5)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -28,5 +28,8 @@ true: annot, bin_annot
 # Executable test
 <test.{native,byte}>: oasis_executable_test_cclib
 <test.{native,byte}>: use_firmata
+# Executable SimpleExample
+<SimpleExample.{native,byte}>: oasis_executable_simpleexample_cclib
+<SimpleExample.{native,byte}>: use_firmata
 <*.ml{,i,y}>: use_firmata
 # OASIS_STOP
