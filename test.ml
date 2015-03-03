@@ -4,7 +4,7 @@ open Firmata
 let main () =
 	let port_opt = openPort "/dev/ttyACM0" in
 	match port_opt with
-	| Some(port) ->
+	| OpenOk(port) ->
 		setSamplingRate port 10 ;
 		setPinMode      port 13 OutputPin ;
 		digitalWrite    port 13 1 ;
