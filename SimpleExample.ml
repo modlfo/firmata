@@ -16,7 +16,7 @@ let main () =
         setSamplingRate  board 10 ;           (* sets the sampling rate to 10 ms *)
         setPinMode       board 21 AnalogPin ; (* configures pin 21 as analog input *)
         setPinMode       board 4  ServoPin ;  (* configures pin 4 as servo *)
-        reportAnalogPin  board 21 true;       (* request the value of pin 21 to be reported  preiodically *)
+        reportAnalogPin  board 21 true;       (* request the value of pin 21 to be reported periodically *)
         (* infinite loop *)
         let rec loop _ =
            update board 1;                    (* updates the board and waits maximum 1 ms *)
