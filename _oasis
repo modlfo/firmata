@@ -18,6 +18,11 @@ Library "firmata"
   if system(macosx)
     CCOpt: -x c++ -DMACOSX
     CCLib:-lstdc++
+  if system(linux)
+    CCOpt: -x c++ -DLINUX
+    CCLib:-lstdc++
+  if os_type(Win32)
+    CCOpt:/TP /DWINDOWS
 
 Executable "test"
   Path: .
@@ -27,6 +32,8 @@ Executable "test"
     firmata
   if system(macosx)
     CCLib:-lstdc++ -framework CoreFoundation -framework IOKit
+  if system(linux)
+    CCLib:-lstdc++
 
 AlphaFeatures: ocamlbuild_more_args
 Document "firmata_api"
