@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 7143f272e71127b5f994e3899eb20a68) *)
+(* DO NOT EDIT (digest: bbf0657a44f3c35e6ed3748b34dba4c5) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -651,40 +651,6 @@ let package_default =
                (OASISExpr.ETest ("system", "macosx"), S [A "-lstdc++"]);
                (OASISExpr.ETest ("system", "linux"), S [A "-lstdc++"])
             ]);
-          (["oasis_executable_test_cclib"; "link"],
-            [
-               (OASISExpr.EBool true, S []);
-               (OASISExpr.ETest ("system", "macosx"),
-                 S
-                   [
-                      A "-cclib";
-                      A "-lstdc++";
-                      A "-cclib";
-                      A "-framework";
-                      A "-cclib";
-                      A "CoreFoundation";
-                      A "-cclib";
-                      A "-framework";
-                      A "-cclib";
-                      A "IOKit"
-                   ]);
-               (OASISExpr.ETest ("system", "linux"),
-                 S [A "-cclib"; A "-lstdc++"])
-            ]);
-          (["oasis_executable_test_cclib"; "ocamlmklib"; "c"],
-            [
-               (OASISExpr.EBool true, S []);
-               (OASISExpr.ETest ("system", "macosx"),
-                 S
-                   [
-                      A "-lstdc++";
-                      A "-framework";
-                      A "CoreFoundation";
-                      A "-framework";
-                      A "IOKit"
-                   ]);
-               (OASISExpr.ETest ("system", "linux"), S [A "-lstdc++"])
-            ]);
           (["oasis_executable_simpleexample_cclib"; "link"],
             [
                (OASISExpr.EBool true, S []);
@@ -762,6 +728,6 @@ let conf = {MyOCamlbuildFindlib.no_automatic_syntax = false}
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default conf package_default;;
 
-# 766 "myocamlbuild.ml"
+# 732 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;
