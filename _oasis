@@ -18,7 +18,7 @@ Library "firmata"
   if system(macosx)
     CCOpt: -x c++ -DMACOSX
     CCLib:-lstdc++
-  if system(linux)
+  if system(linux) || system(linux_eabihf)
     CCOpt: -x c++ -DLINUX
     CCLib:-lstdc++
   if os_type(Win32)
@@ -33,7 +33,7 @@ Executable "SimpleExample"
     firmata
   if system(macosx)
     CCLib:-lstdc++ -framework CoreFoundation -framework IOKit
-  if system(linux)
+  if system(linux) || system(linux_eabihf)
     CCLib:-lstdc++
 
 Executable "NonBlockingExample"
@@ -45,7 +45,7 @@ Executable "NonBlockingExample"
     firmata,unix
   if system(macosx)
     CCLib:-lstdc++ -framework CoreFoundation -framework IOKit
-  if system(linux)
+  if system(linux) || system(linux_eabihf)
     CCLib:-lstdc++
 
 AlphaFeatures: ocamlbuild_more_args
