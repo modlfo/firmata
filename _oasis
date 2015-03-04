@@ -5,7 +5,7 @@ Authors: Leonardo Laguna Ruiz <modlfo@gmail.com>
 License: GPL-3
 
 Description: Allows to control boards supporting the Firmata protocol (firmata.org) like Arduino boards.
-Homepage: http://firmata.org
+Homepage: https://github.com/modlfo/firmata
 
 OASISFormat: 0.4
 BuildTools: ocamlbuild
