@@ -1,6 +1,10 @@
 # Firmata
 Ocaml library to control Firmata boards like Arduino
 
+You can find the complete list of API functions in the `firmata.mli` file.
+
+For examples on how to use the library see `SimpleExample.ml` and `NonBlockingExample.ml`.
+
 
 ### Building the library and the examples
 
