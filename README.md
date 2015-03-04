@@ -42,19 +42,19 @@ The first thing that you have to do is finding which port your board is connecte
 
 Once you know the name of your port use `openPort port_name` start the communication with the board.
 
-Depending on the board, it may take some time to initialize and respond. Use [update board ms] to process any incoming data. You can poll the status of the board by using `isReady board`.
+Depending on the board, it may take some time to initialize and respond. Use `update board ms` to process any incoming data. You can poll the status of the board by using `isReady board`.
 
 Once the board is ready you can display the pin information by calling `printInformation board`. This will print a list of the pins and the capabilities. You can retrieve this information by calling `getPinInformation board` to get a list of all the pins. You can also use `getName` and `getVersion` to get more information about the board.
 
-Now you can start configuring the pins of the board. You can call [setPinMode board pin mode] to define how you want to use it.
+Now you can start configuring the pins of the board. You can call `setPinMode board pin mode` to define how you want to use it.
 
-Before reading values of you need to request data from the board. If you want to do it manually use [queryPinState board pin]. This will ask the board for the current status of the pin. The data will be available once the once the board answers back.
+Before reading values of you need to request data from the board. If you want to do it manually use `queryPinState board pin`. This will ask the board for the current status of the pin. The data will be available once the once the board answers back.
 
-You can ask the board to send information about a pin periodically. To do so, you need first to define how often you want the data. This is done with the function [setSamplingRate board ms]. Regular Arduino boards are limited by the processor speed and the serial communication speed. Other boards like the Teensy 3.1 can communicate much faster. Once the sampling rate is set, you need to define which pin should periodically update. Use [reportDigitalPin board pin true] or [reportAnalogPin board pin false] for digital or analog pins correspondingly.
+You can ask the board to send information about a pin periodically. To do so, you need first to define how often you want the data. This is done with the function `setSamplingRate board ms`. Regular Arduino boards are limited by the processor speed and the serial communication speed. Other boards like the Teensy 3.1 can communicate much faster. Once the sampling rate is set, you need to define which pin should periodically update. Use `reportDigitalPin board pin true` or `reportAnalogPin board pin false` for digital or analog pins correspondingly.
 
-You have to consider that you need to call the function [update board ms] to process the incoming data. This function will block [ms] milliseconds waiting for data. If you don't want the function to block call it with [ms] equal zero [update board 0].
+You have to consider that you need to call the function `update board ms` to process the incoming data. This function will block `ms` milliseconds waiting for data. If you don't want the function to block call it with `ms` equal zero `update board 0`.
 
-To read or write values from the digital pins use the functions [digitalWrite] and [digitalRead]. For analog inputs use [analogRead] and to control PWM signals or servos use [analogWrite].
+To read or write values from the digital pins use the functions `digitalWrite` and `digitalRead`. For analog inputs use `analogRead` and to control PWM signals or servos use `analogWrite`.
 
 ### Known issues
 
