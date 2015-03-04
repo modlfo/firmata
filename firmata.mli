@@ -11,6 +11,15 @@ type pin_mode =
    | I2CPin      (** I2C (not supported) *)
    | UndefinedPin(** Undefined mode *)
 
+(** Used to store all information about the pins *)
+type pin_info =
+   {
+      number                 : int;                   (** Number *)
+      mutable mode           : pin_mode;              (** Current mode *)
+      mutable analog_channel : int option;            (** Analog channel number *)
+      supported_modes        : (pin_mode * int) list; (** List of supported modes *)
+   }
+
 (** Main type that represents a Firmata board *)
 type firmata_type
 
@@ -18,6 +27,9 @@ type firmata_type
 type open_return =
    | OpenOk    of firmata_type
    | OpenError of string
+
+(** [getSerialPortNames ()] : Returns a list of all the serial ports available in your computer. *)
+val getSerialPortNames : unit -> string list
 
 (** [openPort name] : Opens the serial port [name] which should have attached the board. *)
 val openPort : string -> open_return
@@ -84,3 +96,13 @@ val configServo : firmata_type -> int -> int -> int -> unit
 (** [printInformation board] prints the name, pin information and mappings of a board. *)
 val printInformation : firmata_type -> unit
 
+(** [getPinInformation board] : Returns a list with information of every pin (type [pin_info]).
+    This information contains: the pin number, the current mode, the corresponding analog channel
+    and all the modes it supports. *)
+val getPinInformation : firmata_type -> pin_info list
+
+(** [getName board] : Returns the name of the board (this name defined when you flash your board) *)
+val getName : firmata_type -> string
+
+(** [getVersion] : Returns a string with the version of the firmata *)
+val getVersion : firmata_type -> string

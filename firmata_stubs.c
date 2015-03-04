@@ -33,6 +33,13 @@ value newSerial(){
 	CAMLreturn(obj);
 }
 
+void deleteSerial(value obj){
+	CAMLparam1(obj);
+	Serial* serial_obj = (Serial*) Long_val(obj);
+	delete serial_obj;
+	CAMLreturn0;
+}
+
 value openSerial(value obj, value port){
 	CAMLparam2(obj,port);
 	CAMLlocal1(result);

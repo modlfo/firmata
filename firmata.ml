@@ -23,7 +23,11 @@ type serial_obj
 (** Creates a new serial port object
    @return serial_obj - Object used to have access to the port
 *)
-external newSerial   : unit       -> serial_obj             = "newSerial"
+external newSerial : unit -> serial_obj                     = "newSerial"
+
+
+(** Frees the memory allocated for the serial port object *)
+external deleteSerial : serial_obj -> unit                  = "deleteSerial"
 
 (** Opens a serial port
    @param port    - The serial port object created with newSerial
@@ -35,52 +39,52 @@ external openSerial  : serial_obj -> string -> string option = "openSerial"
 (** Closes a serial port
    @param port - The serial port object
 *)
-external closeSerial : serial_obj -> unit                   = "closeSerial"
+external closeSerial : serial_obj -> unit                    = "closeSerial"
 
 (** Sets the baudrate of the port
    @param port     - The serial port object
    @param baudrate - The desired baudrate. This should be a valid baudrate value
    @return status  - True if the value was set correctly
 *)
-external setBaudrate : serial_obj -> int -> bool           = "setBaudrate"
+external setBaudrate : serial_obj -> int -> bool             = "setBaudrate"
 
 (** Returns a list with the names of the available ports
    @param port   - This can be an arbitrary serial_obj object
    @return names - A list with the names of available ports
 *)
-external portList    : serial_obj -> string list            = "portList"
+external portList    : serial_obj -> string list             = "portList"
 
 (** Returs the data the port has received
    @param port  - The serial port object
    @return data - A list of integers containing the received data
 *)
-external readSerial  : serial_obj -> int list               = "readSerial"
+external readSerial  : serial_obj -> int list                = "readSerial"
 
 (** Writes the given data to the port
    @param port  - The serial port object
    @param data  - A list of integers that should be send
    @return sent - The number of bytes written to the port
 *)
-external writeSerial : serial_obj -> int list -> int        = "writeSerial"
+external writeSerial : serial_obj -> int list -> int         = "writeSerial"
 
 (** Waits for a given number of ms and returns the number of bytes available
    @param port - The serial port object
    @param time - Time to wait (in ms) before returning
    @return n   - The number of bytes waiting to be red
 *)
-external waitSerial  : serial_obj -> int -> int             = "waitSerial"
+external waitSerial  : serial_obj -> int -> int              = "waitSerial"
 
 (** Returns the status of the port
    @param port    - The serial port object
    @return status - True if is open false otherwise
 *)
-external isOpenSerial: serial_obj -> bool                   = "isOpenSerial"
+external isOpenSerial: serial_obj -> bool                    = "isOpenSerial"
 
 (** Set the serial port control values
   @param DTR - Data Terminal Ready value
   @param RTS - ?
 *)
-external setControl  : serial_obj -> bool -> bool -> unit   = "setControl"
+external setControl  : serial_obj -> bool -> bool -> unit    = "setControl"
 
 (** Modes supported by the pins *)
 type pin_mode =
@@ -500,4 +504,19 @@ let digitalRead (handler:firmata_type) (pin:int) =
 
 let isReady (handler:firmata_type) =
    handler.ready
+
+let getSerialPortNames () : string list =
+   let tmp_port = newSerial () in
+   let ports = portList tmp_port in
+   let _ = deleteSerial tmp_port in
+   ports
+
+let getPinInformation (handler:firmata_type) : pin_info list =
+   List.filter (fun pin -> pin.number>=0) (Array.to_list handler.pins)
+
+let getName (handler:firmata_type) : string =
+   handler.name
+
+let getVersion (handler:firmata_type) : string =
+   handler.version
 
