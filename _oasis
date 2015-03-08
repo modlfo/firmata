@@ -12,7 +12,7 @@ BuildTools: ocamlbuild
 Plugins: META (0.4), DevFiles (0.4)
 
 Library "firmata"
-  Path: .
+  Path: lib
   Modules: Firmata
   CSources: firmata_stubs.c,serial.c,serial.h
   if system(macosx)
@@ -25,7 +25,7 @@ Library "firmata"
     CCOpt:/TP /DWINDOWS
 
 Executable "SimpleExample"
-  Path: .
+  Path: examples
   MainIs: SimpleExample.ml
   CompiledObject: best
   Install: false
@@ -37,7 +37,7 @@ Executable "SimpleExample"
     CCLib:-lstdc++
 
 Executable "NonBlockingExample"
-  Path: .
+  Path: examples
   MainIs: NonBlockingExample.ml
   CompiledObject: best
   Install: false

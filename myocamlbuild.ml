@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: bbf0657a44f3c35e6ed3748b34dba4c5) *)
+(* DO NOT EDIT (digest: 3bef895b42affe7ccfdefb4a88fcd484) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -607,8 +607,8 @@ end
 open Ocamlbuild_plugin;;
 let package_default =
   {
-     MyOCamlbuildBase.lib_ocaml = [("firmata", [], [])];
-     lib_c = [("firmata", ".", ["serial.h"])];
+     MyOCamlbuildBase.lib_ocaml = [("firmata", ["lib"], [])];
+     lib_c = [("firmata", "lib", ["lib/serial.h"])];
      flags =
        [
           (["oasis_library_firmata_ccopt"; "compile"],
@@ -720,7 +720,7 @@ let package_default =
                (OASISExpr.ETest ("system", "linux"), S [A "-lstdc++"])
             ])
        ];
-     includes = []
+     includes = [("examples", ["lib"])]
   }
   ;;
 
