@@ -7,7 +7,7 @@
 
 open Firmata
 
-let serial_port = "/dev/tty.usbmodem1411" ;;
+let serial_port = "/dev/ttyACM0" ;;
 
 type board_states =
   | Waiting

@@ -5,7 +5,7 @@
 
 open Firmata
 
-let serial_port = "/dev/tty.usbmodem1411" ;;
+let serial_port = "/dev/ttyACM0" ;;
 
 let rec waitTillReady board =
     update board 1;

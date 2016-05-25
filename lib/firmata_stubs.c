@@ -16,6 +16,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/alloc.h>
@@ -25,25 +26,37 @@
 
 extern "C" {
 
+void deleteSerial(value obj){
+	CAMLparam1(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
+	delete serial_obj;
+	CAMLreturn0;
+}
+
+static struct custom_operations serial_custom = {
+  	"serial_custom",
+  	&deleteSerial,
+  	custom_compare_default,
+  	custom_compare_ext_default,
+	custom_hash_default,
+	custom_serialize_default,
+	custom_deserialize_default,
+};
+
 value newSerial(){
 	CAMLparam0 ();
 	CAMLlocal1(obj);
 	Serial* port = new Serial();
-	obj = Val_long((long)port);
+	obj = caml_alloc_custom(&serial_custom, sizeof(Serial), 0, 1);
+	memcpy(Data_custom_val(obj), port, sizeof(Serial));
+	delete port;
 	CAMLreturn(obj);
-}
-
-void deleteSerial(value obj){
-	CAMLparam1(obj);
-	Serial* serial_obj = (Serial*) Long_val(obj);
-	delete serial_obj;
-	CAMLreturn0;
 }
 
 value openSerial(value obj, value port){
 	CAMLparam2(obj,port);
 	CAMLlocal1(result);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	int ret = serial_obj->Open(String_val(port));
 	// Compose the return value
 	if(ret==0)
@@ -59,7 +72,7 @@ value openSerial(value obj, value port){
 void closeSerial(value obj, value port){
 	CAMLparam2(obj,port);
 	CAMLlocal1(result);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	serial_obj->Close();
 	CAMLreturn0;
 }
@@ -67,7 +80,7 @@ void closeSerial(value obj, value port){
 value setBaudrate(value obj, value baudrate){
 	CAMLparam2(obj,baudrate);
 	CAMLlocal1(result);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	int ret = serial_obj->Set_baud(Long_val(baudrate));
 	// Compose the return value
 	if(ret==0)
@@ -81,7 +94,7 @@ value setBaudrate(value obj, value baudrate){
 value portList(value obj){
 	CAMLparam1(obj);
 	CAMLlocal2(result,tmplist);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	std::vector<string> port_vector = serial_obj->port_list();
 
 	result = Val_int(0); // nil
@@ -99,7 +112,7 @@ value portList(value obj){
 value waitSerial(value obj,value msec){
 	CAMLparam2(obj,msec);
 	CAMLlocal1(result);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	int n = serial_obj->Input_wait(Long_val(msec));
 	result = Val_int(n);
 	CAMLreturn(result);
@@ -108,7 +121,7 @@ value waitSerial(value obj,value msec){
 value isOpenSerial(value obj){
 	CAMLparam1(obj);
 	CAMLlocal1(result);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	int n = serial_obj->Is_open();
 	result = Val_int(n);
 	CAMLreturn(result);
@@ -116,7 +129,7 @@ value isOpenSerial(value obj){
 
 void setControl(value obj,value dtr,value rts){
 	CAMLparam3(obj,dtr,rts);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	serial_obj->Set_control(Long_val(dtr),Long_val(rts));
 	CAMLreturn0;
 }
@@ -125,7 +138,7 @@ value writeSerial(value obj, value list){
 	CAMLparam2(obj,list);
 	CAMLlocal2(result,tmplist);
 	unsigned char buffer[1024*4];
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	tmplist = list;
 	int i=0;
 	int total=0;
@@ -148,7 +161,7 @@ value writeSerial(value obj, value list){
 value readSerial(value obj){
 	CAMLparam1(obj);
 	CAMLlocal2(result,tmplist);
-	Serial* serial_obj = (Serial*) Long_val(obj);
+	Serial* serial_obj = (Serial*) Data_custom_val(obj);
 	unsigned char buffer[1024*4];
 
 	result = Val_int(0); // nil
