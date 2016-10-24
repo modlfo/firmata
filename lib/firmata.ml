@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *)
+*)
 
 (** Allows to control boards supporting the Firmata protocol (http://firmata.org) like Arduino boards *)
 
@@ -21,7 +21,7 @@
 type serial_obj
 
 (** Creates a new serial port object
-   @return serial_obj - Object used to have access to the port
+    @return serial_obj - Object used to have access to the port
 *)
 external newSerial : unit -> serial_obj                     = "newSerial"
 
@@ -30,59 +30,59 @@ external newSerial : unit -> serial_obj                     = "newSerial"
 external deleteSerial : serial_obj -> unit                  = "deleteSerial"
 
 (** Opens a serial port
-   @param port    - The serial port object created with newSerial
-   @param name    - The name of the serial port
-   @return status - SerialOk if the port was opened correctly or SerialError(msg) if the port failed to open
+    @param port    - The serial port object created with newSerial
+    @param name    - The name of the serial port
+    @return status - SerialOk if the port was opened correctly or SerialError(msg) if the port failed to open
 *)
 external openSerial  : serial_obj -> string -> string option = "openSerial"
 
 (** Closes a serial port
-   @param port - The serial port object
+    @param port - The serial port object
 *)
 external closeSerial : serial_obj -> unit                    = "closeSerial"
 
 (** Sets the baudrate of the port
-   @param port     - The serial port object
-   @param baudrate - The desired baudrate. This should be a valid baudrate value
-   @return status  - True if the value was set correctly
+    @param port     - The serial port object
+    @param baudrate - The desired baudrate. This should be a valid baudrate value
+    @return status  - True if the value was set correctly
 *)
 external setBaudrate : serial_obj -> int -> bool             = "setBaudrate"
 
 (** Returns a list with the names of the available ports
-   @param port   - This can be an arbitrary serial_obj object
-   @return names - A list with the names of available ports
+    @param port   - This can be an arbitrary serial_obj object
+    @return names - A list with the names of available ports
 *)
 external portList    : serial_obj -> string list             = "portList"
 
 (** Returs the data the port has received
-   @param port  - The serial port object
-   @return data - A list of integers containing the received data
+    @param port  - The serial port object
+    @return data - A list of integers containing the received data
 *)
 external readSerial  : serial_obj -> int list                = "readSerial"
 
 (** Writes the given data to the port
-   @param port  - The serial port object
-   @param data  - A list of integers that should be send
-   @return sent - The number of bytes written to the port
+    @param port  - The serial port object
+    @param data  - A list of integers that should be send
+    @return sent - The number of bytes written to the port
 *)
 external writeSerial : serial_obj -> int list -> int         = "writeSerial"
 
 (** Waits for a given number of ms and returns the number of bytes available
-   @param port - The serial port object
-   @param time - Time to wait (in ms) before returning
-   @return n   - The number of bytes waiting to be red
+    @param port - The serial port object
+    @param time - Time to wait (in ms) before returning
+    @return n   - The number of bytes waiting to be red
 *)
 external waitSerial  : serial_obj -> int -> int              = "waitSerial"
 
 (** Returns the status of the port
-   @param port    - The serial port object
-   @return status - True if is open false otherwise
+    @param port    - The serial port object
+    @return status - True if is open false otherwise
 *)
 external isOpenSerial: serial_obj -> bool                    = "isOpenSerial"
 
 (** Set the serial port control values
-  @param DTR - Data Terminal Ready value
-  @param RTS - ?
+    @param DTR - Data Terminal Ready value
+    @param RTS - ?
 *)
 external setControl  : serial_obj -> bool -> bool -> unit    = "setControl"
 
@@ -176,11 +176,11 @@ let pinModeInt (mode:pin_mode) : int =
 
 (** Converts a list of characters to a string *)
 let implode (l:char list) : string =
-  let res = Bytes.create (List.length l) in
-  let rec imp i = function
-  | [] -> res
-  | c :: l -> Bytes.set res i c; imp (i + 1) l in
-  imp 0 l
+   let res = Bytes.create (List.length l) in
+   let rec imp i = function
+      | [] -> res
+      | c :: l -> Bytes.set res i c; imp (i + 1) l in
+   imp 0 l
 
 (** Splits an integer value into its lsb and msb of 7 bits each *)
 let splitLsbMsb (value:int) : int * int =
@@ -207,19 +207,19 @@ let rec consumeSysex data acc =
 let rec parse (data:int list) =
    match data with
    | [] -> [],[]
-      (* Analog I/O*)
+   (* Analog I/O*)
    | cmd::lsb::msb::tail     when isCmd cmd 0xE0 ->
       let c = cmd land 0x0F in
       let v = joinLsbMsb lsb msb in
       let inner,rem_data = parse tail in
       AnalogMsg(c,v)::inner,rem_data
-      (* Digital I/O*)
+   (* Digital I/O*)
    | cmd::lsb::msb::tail     when isCmd cmd 0x90 ->
       let c = cmd land 0x0F in
       let v = joinLsbMsb lsb msb in
       let inner,rem_data = parse tail in
       DigitalMsg(c,v)::inner,rem_data
-      (* Firware version *)
+   (* Firware version *)
    | 0xF9::vN::vn::tail ->
       let inner,rem_data = parse tail in
       FirmwareMsg(vN,vn,"")::inner,rem_data
@@ -232,9 +232,9 @@ let rec parse (data:int list) =
             let inner,rest2 = parse rest in
             response::inner,rest2
       end
-   | cmd::tail     when not (isCmd cmd 0xE0)
-      && not (isCmd cmd 0x90)
-      && cmd<>0xF0 ->
+   | cmd::tail when not (isCmd cmd 0xE0)
+                     && not (isCmd cmd 0x90)
+                     && cmd<>0xF0 ->
       Printf.printf "Unknown message: %l\n" cmd;
       parse tail
    | _ ->
@@ -259,13 +259,13 @@ and parseSysex (data: int list) =
       let pin_modes = parsePinModes tail [] in
       let pin_info =
          List.mapi (fun i modes ->
-            {
-               number = i;
-               mode = UndefinedPin;
-               analog_channel = None;
-               supported_modes = modes
-            } )
-         pin_modes
+               {
+                  number = i;
+                  mode = UndefinedPin;
+                  analog_channel = None;
+                  supported_modes = modes
+               } )
+            pin_modes
       in
       CapabilitiesMsg(pin_info)
    (* Analog pins mapping response *)
@@ -405,7 +405,7 @@ let processResponse (handler:firmata_type) msg : unit =
       let start = 8 * dport in
       let bits = splitBits v |> List.mapi (fun i a -> i+start,a) in
       List.iter (fun (pin,b) ->
-         if isInput handler pin then Array.set handler.values pin b) bits
+            if isInput handler pin then Array.set handler.values pin b) bits
    | FirmwareMsg(x,y,name) ->
       let version = Printf.sprintf "%i.%i" x y in
       queryCapabilities handler;
@@ -417,16 +417,16 @@ let processResponse (handler:firmata_type) msg : unit =
       List.iteri (fun i a -> Array.set handler.pins i a) pin_info
    | MappingMsg(mappings) ->
       List.iteri (
-            fun i a ->
-               let pin_info = Array.get handler.pins i in
-               pin_info.analog_channel<-a
-            ) mappings;
+         fun i a ->
+            let pin_info = Array.get handler.pins i in
+            pin_info.analog_channel<-a
+      ) mappings;
       List.iteri (
-            fun i m ->
-               match m with
-               | Some(c) -> Array.set handler.chan_to_pin c i
-               | _ -> ()
-            ) mappings;
+         fun i m ->
+            match m with
+            | Some(c) -> Array.set handler.chan_to_pin c i
+            | _ -> ()
+      ) mappings;
       handler.ready <- true;
       handler.nchan <- List.length mappings
    | PinStatusMsg(pin,mode,value) when handler.ready ->
@@ -519,4 +519,3 @@ let getName (handler:firmata_type) : string =
 
 let getVersion (handler:firmata_type) : string =
    handler.version
-
